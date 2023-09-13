@@ -22,7 +22,14 @@ package D_Xtras is
    -- Post: Devuelve 'l'
    function Longitud_String (
          S : String ) 
-     return natural; 
+     return Natural; 
+
+   -- Prec: S es un string de longitud 'l' >=0
+   -- Post: Si 'l'>0 devuelve un string en minúsculas con el primer caracter
+   --       en mayúsculas. Si 'l'=0 devuelve 'X'.
+   function Formato (
+         X : in     String ) 
+     return String; 
 
    -- Prec: Clave es un string válido de longitud mayor que 0
    -- Post: Devuelve un valor de semilla para la clave proporcionada
@@ -74,4 +81,4 @@ end D_Xtras;
 --   along with this program; if not, write to the Free Software
 --   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.        
 --   More info:
---   http://www.gnu.org/copyleft/gpl.html    
+--   http://www.gnu.org/copyleft/gpl.html       

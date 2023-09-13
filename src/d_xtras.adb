@@ -1,7 +1,7 @@
 with D_Byte;
 use D_Byte;
-with Ada.Strings.Unbounded;
-use Ada.Strings.Unbounded;
+with Ada.Characters.Handling,Ada.Strings.Unbounded;
+use Ada.Characters.Handling,Ada.Strings.Unbounded;
 
 package body D_Xtras is
 
@@ -11,12 +11,27 @@ package body D_Xtras is
    -- Post: Devuelve 'l'
    function Longitud_String (
          S : String ) 
-     return natural is 
+     return Natural is 
    begin
       return Length(To_Unbounded_String(S));
    end Longitud_String;
 
-
+   -- Prec: S es un string de longitud 'l' >=0
+   -- Post: Si 'l'>0 devuelve un string en minúsculas con el primer caracter
+   --       en mayúsculas. Si 'l'=0 devuelve 'X'.
+   function Formato (
+         X : in     String ) 
+     return String is 
+      Y : Unbounded_String;  
+   begin
+      if Longitud_String(X)>0 then
+         Y:=To_Unbounded_String(To_Lower(X));
+         Replace_Element(Y,1,To_Upper(Element(Y,1)));
+         return To_String(Y);
+      else
+         return X;
+      end if;
+   end Formato;
 
    -- Prec: Ruta es una ruta válida del sistema a un fichero existente no abierto
    --       Ruta tiene como máximo 255 carácteres 
@@ -80,7 +95,7 @@ package body D_Xtras is
      return String is 
       Longitud,  
       Indice   : Natural := 0;  
-   begin  
+   begin
       Longitud:=Longitud_String(Ruta);
       if Longitud=0 then
          return "";
@@ -110,10 +125,10 @@ package body D_Xtras is
          Ruta : String ) 
      return String is 
       Longitud,  
-      Indice   : Natural:= 0;  
+      Indice   : Natural := 0;  
    begin
       Longitud:=Longitud_String(Ruta);
-            if Longitud=0 then
+      if Longitud=0 then
          return "";
       end if;
       for I in 1..Longitud loop

@@ -1,11 +1,11 @@
 
-with adastegano_menu;
+with Adastegano_Menu;
 
 separate(Adastegano)
 
-procedure p_Ayuda is 
+procedure P_Ayuda is 
 
 
 begin
-   adastegano_menu.ayuda;
-end p_Ayuda;
+   Adastegano_Menu.Ayuda;
+end P_Ayuda;

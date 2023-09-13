@@ -493,6 +493,37 @@ package body Adastegano_Menu is
    end Menu_Descifrado_Confirmacion_Datos ;
 
 
+   -- Confirmacion datos
+
+   procedure Confirmacion_Datos_Metodo (
+         S : String ) is 
+   begin
+      Put_Line("Metodo:       " & S);
+   end Confirmacion_Datos_Metodo;
+
+   procedure Confirmacion_Datos_Origen (
+         S : String ) is 
+   begin
+      Put_Line("Ruta origen:  " & S);
+   end Confirmacion_Datos_Origen;
+
+   procedure Confirmacion_Datos_Destino (
+         S : String ) is 
+   begin
+      Put_Line("Ruta destino: " & S);
+   end Confirmacion_Datos_Destino;
+
+   procedure Confirmacion_Datos_Copia (
+         S : String ) is 
+   begin
+      Put_Line("Ruta copia:   " & S);
+   end Confirmacion_Datos_Copia;
+
+   procedure Confirmacion_Datos_Clave (
+         S : String ) is 
+   begin
+      Put_Line("Clave:        " & S );
+   end Confirmacion_Datos_Clave;
 
    -------------------------------------------------------
    procedure Error_Ruta_Invalida is 

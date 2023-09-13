@@ -63,6 +63,15 @@ package body AES_Cipher is
       end loop;
       return Result;
    end To_Key;
+   
+   function String16_To_Key (S : String) return Key_Block is
+      Result : Key_Block;
+   begin
+      for i in Result'Range loop
+         Result (i) :=character'pos( S (Integer (i+1)));
+      end loop;
+      return Result;
+   end String16_To_Key;
 
    function To_Key (S : String) return Key_Block_192 is
       Result : Key_Block_192;

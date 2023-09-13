@@ -17,13 +17,14 @@
 with Jewl.Simple_Windows;
 use Jewl.Simple_Windows;
 
-with Ada.Text_Io,Ada.Characters.Handling,Ada.Strings.Unbounded;
-use Ada.Text_Io,Ada.Characters.Handling,Ada.Strings.Unbounded;
+with Ada.Text_Io,Ada.Strings.Unbounded;
+use Ada.Text_Io,Ada.Strings.Unbounded;
 
-with D_Imagen,Esteganografia;
-use D_Imagen,Esteganografia;
+with Esteganografia,D_Xtras;
+use Esteganografia;
 
 procedure Adasteganogui is 
+   -- Ventana principal
    Principal : Frame_Type := Frame (640, 480, "AdaStegano", 'X');  
 
    -- Previsualizacion
@@ -44,7 +45,7 @@ procedure Adasteganogui is
    Explorador_Leer_Soportados : Open_Dialog_Type := Open_Dialog ("Seleccione un archivo");  
    Explorador_Escribir        : Save_Dialog_Type := Save_Dialog ("Guardar como");  
 
-   -- Cifrar
+   -- Menu Cifrar
    Panel_Cifrar : Panel_Type := Panel (Principal, (15, 10), 335, 180, "Cifrar");  
 
    L_C_Origen       : Label_Type   := Label (Panel_Cifrar, (13, 32), 40, 50, "Origen");  
@@ -63,7 +64,7 @@ procedure Adasteganogui is
    B_C_Copia     : Button_Type  := Button (Panel_Cifrar, (295, 130), 20, 20, "...", 'P');  
 
 
-   -- Descifrar
+   -- Menu Descifrar
    Panel_Descifrar : Panel_Type := Panel (Principal, (15, 210), 335, 165, "Descifrar");  
 
    L_D_Origen : Label_Type   := Label (Panel_Descifrar, (13, 32), 40, 50, "Origen");  
@@ -79,7 +80,7 @@ procedure Adasteganogui is
    E_D_Copia : Editbox_Type := Editbox (Panel_Descifrar, (130, 127), 145, 20, Mensaje_Copia);  
    B_D_Copia : Button_Type  := Button (Panel_Descifrar, (295, 127), 20, 20, "...", 'R');  
 
-   -- Botones
+   -- Botones y contraseña
    B_Cifrar    : Button_Type := Button (Principal, (395, 215), 85, 25, "Cifrar", 'C');  
    B_Descifrar : Button_Type := Button (Principal, (505, 215), 85, 25, "Descifrar", 'D');  
 
@@ -90,18 +91,6 @@ procedure Adasteganogui is
    E_Rpassword : Editbox_Type  := Editbox (Panel_Otros, (80, 50), 125, 20, "", True);  
    L_Mcifrado  : Label_Type    := Label (Panel_Otros, (7, 85), 73, 30, "Metodo de cifrado");  
    C_Metodo    : Combobox_Type := Combobox (Panel_Otros, (80, 88), 125, False);  
-
-
-   -- Da formato a un string, poniendolo en minusculas con la primera letra en mayúsculas
-   function Formato (
-         X : in     String ) 
-     return String is 
-      Y : Unbounded_String;  
-   begin
-      Y:=To_Unbounded_String(To_Lower(X));
-      Replace_Element(Y,1,To_Upper(Element(Y,1)));
-      return To_String(Y);
-   end Formato;
 
    Campo_Informacion : Natural := 0;  
 
@@ -147,7 +136,7 @@ procedure Adasteganogui is
 
 begin
    -- Licencia
-   Put_Line("   AdaSteganoGUI v0.1, Copyright (C) 2005 - Andres Soliño Klega");
+   Put_Line("   AdaSteganoGUI v0.2, Copyright (C) 2005 - Andres Soliño Klega");
    New_Line;
    Put_Line("AdaSteganoGUI is a version of AdaStegano with an User Interface developed");
    Put_Line(" 100% in Ada with JEWL libraries.");
@@ -171,7 +160,7 @@ begin
 
    -- Metodos
    for X in Esteganografia.T_Metodo'First .. Esteganografia.T_Metodo'Last loop
-      Insert_Line(C_Metodo,Formato(X'Img));
+      Insert_Line(C_Metodo,D_Xtras.Formato(Esteganografia.T_Metodo'Image(X)));
    end loop;
 
 
@@ -233,5 +222,7 @@ begin
    abort C_Cargar_Imagen;
    abort C_Comprobar_Datos;
    abort C_Informacion_Adicional;
+
+
 
 end Adasteganogui;

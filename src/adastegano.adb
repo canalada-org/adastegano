@@ -21,15 +21,18 @@ with Ada.Command_Line;
 
 procedure Adastegano is 
 
+   -- Listado de los distintos argumentos
    Ayuda,  
    Metodo_Serpent,  
    Metodo_Cesar,  
    Cifrar,  
    Descifrar      : Smart_Arguments.Argument_Type;  
 
+   -- Muestra la ayuda
    procedure P_Ayuda is 
    separate;
 
+   -- Realiza el cifrado y ocultación
    procedure P_Cifrar (
          Ruta_Origen  : String;   
          Ruta_Destino : String;   
@@ -38,9 +41,11 @@ procedure Adastegano is
          Clave        : String    ) is 
    separate;
 
+   -- Obtiene los argumentos de su ejecución
    procedure Cifrarxcomando is 
    separate;
 
+   -- Realiza el descifrado
    procedure P_Descifrar (
          Ruta_Origen           : String;                          
          Metodo                : T_Metodo;                        
@@ -49,52 +54,54 @@ procedure Adastegano is
          Ruta_Alternativa      : String                     := "" ) is 
    separate;
 
+   -- Obtiene los argumentos de su ejecución
    procedure Descifrarxcomando is 
    separate;
 
+   -- Inicia el asistente
    procedure Preguntar is 
    separate;
 
 
 begin
    Create_Argument(
-      Argument    => Ayuda,                         
-      Short_Form  => "-h",                          
-      Long_Form   => "help",                        
-      Required    => False,                         
-      Description => "Muestra la ayuda en pantalla");
+      Argument    => Ayuda,            
+      Short_Form  => Ayuda_Short_Form, 
+      Long_Form   => Ayuda_Long_Form,  
+      Required    => False,            
+      Description => Ayuda_Description);
 
    Create_Argument(
-      Argument                => Metodo_Serpent,                              
-      Short_Form              => "-s",                                        
-      Long_Form               => "serpent",                                   
-      Required                => False,                                       
-      Number_Required_Subargs => 0,                                           
-      Description             => "Encripta/desencripta con el metodo Serpent");
+      Argument                => Metodo_Serpent,     
+      Short_Form              => Serpent_Short_Form, 
+      Long_Form               => Serpent_Long_Form,  
+      Required                => False,              
+      Number_Required_Subargs => 0,                  
+      Description             => Serpent_Description);
 
    Create_Argument(
-      Argument                => Metodo_Cesar,                              
-      Short_Form              => "-c",                                      
-      Long_Form               => "cesar",                                   
-      Required                => False,                                     
-      Number_Required_Subargs => 0,                                         
-      Description             => "Encripta/desencripta con el metodo Cesar");
+      Argument                => Metodo_Cesar,     
+      Short_Form              => Cesar_Short_Form, 
+      Long_Form               => Cesar_Long_Form,  
+      Required                => False,            
+      Number_Required_Subargs => 0,                
+      Description             => Cesar_Description);
 
    Create_Argument(
-      Argument                => Cifrar,                            
-      Short_Form              => "-C",                              
-      Long_Form               => "cifrar",                          
-      Required                => False,                             
-      Number_Required_Subargs => 4,                                 
-      Description             => "Cifrar un archivo dentro de otro");
+      Argument                => Cifrar,            
+      Short_Form              => Cifrar_Short_Form, 
+      Long_Form               => Cifrar_Long_Form,  
+      Required                => False,             
+      Number_Required_Subargs => 4,                 
+      Description             => Cifrar_Description);
 
    Create_Argument(
-      Argument                => Descifrar,                                     
-      Short_Form              => "-D",                                          
-      Long_Form               => "descifrar",                                   
-      Required                => False,                                         
-      Number_Required_Subargs => 3,                                             
-      Description             => "Descifra un archivo contenido dentro de otro");
+      Argument                => Descifrar,            
+      Short_Form              => Descifrar_Short_Form, 
+      Long_Form               => Descifrar_Long_Form,  
+      Required                => False,                
+      Number_Required_Subargs => 3,                    
+      Description             => Descifrar_Description);
 
 
    if Smart_Arguments.Argument_Present(Ayuda) then

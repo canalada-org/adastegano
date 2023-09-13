@@ -6,7 +6,7 @@ use Ada.Text_Io,Ada.Real_Time;
 
 with Passwords;
 use type Passwords.String16;
-use type Passwords.String32;
+
 
 package body D_Imagen_Bmp24 is
 
@@ -88,7 +88,7 @@ package body D_Imagen_Bmp24 is
       --   l bytes, y se ha realizado un XOR byte a byte con la clave
       -- * Se le ha aplicado a cada byte un desplazamiento módulo 256 (método Cesar) según los bytes de la clave
 
-      Tiempo            : Duration      := 0.0; -- Estadísticas                                                                                                                                     
+      Tiempo            : Duration      := 0.0; -- Estadísticas                                                                                                                                        
       F                 : T_Binary_File;  
       Tamaño_Bytes_Orig,  
       Tamaño_Bytes_Dest : Positive;  
@@ -392,7 +392,7 @@ package body D_Imagen_Bmp24 is
          Usar_Ruta_Alternativa : Opcion_Alternativa := 0; 
          Ruta_Alternativa      : String             := "" ) is 
 
-      Tiempo : Duration      := 0.0; -- Estadísticas                                                                                                                                      
+      Tiempo : Duration      := 0.0; -- Estadísticas                                                                                                                                         
       F      : T_Binary_File;  
 
       Tamaño_Origen : Positive;  
@@ -537,7 +537,6 @@ package body D_Imagen_Bmp24 is
             Img);
          New_Line;
 
-         Put(Usar_Ruta_Alternativa'Img);
          case Usar_Ruta_Alternativa is
             when 0=> -- Creamos el archivo y sobreescribimos 
                Create(F,Out_File,Ruta_Archivo(Ruta_Origen) & Archivo(
@@ -670,7 +669,7 @@ package body D_Imagen_Bmp24 is
       --   generado mediante un generador pseudo aleatorio con una semilla obtenida a partir de la clave
       -- * Se le ha aplicado a cada grupo de 16 bytes un cifrado Serpent
 
-      Tiempo            : Duration      := 0.0; -- Estadísticas                                                                                                                                     
+      Tiempo            : Duration      := 0.0; -- Estadísticas                                                                                                                                        
       F                 : T_Binary_File;  
       Tamaño_Bytes_Orig,  
       Tamaño_Bytes_Dest : Positive;  
@@ -714,7 +713,6 @@ package body D_Imagen_Bmp24 is
          Byte_Aux : Byte;  
          Sec      : T_Secuencia;  
          Vector16 : Passwords.String16;  
-         Vector32 : Passwords.String32;  
          Clave16  : Passwords.String16 := (others => ' ');  
          B_Dest   : Tbuffer_Dest       :=
          new Buffer_Dest;
@@ -725,19 +723,17 @@ package body D_Imagen_Bmp24 is
          Estadistica        : Positive := 1;  
          Checksum_Realizado : Boolean  := False;  
 
+
          procedure Escribir is 
             Temp : Byte;  
             Pos  : Positive;  
          begin
-            for J in 1..32 loop
+            for J in Vector16'range loop
                Estadistica:=Estadistica+1;
-               for I in 1..4 loop
+               for I in 1..8 loop
                   Siguiente_Posicion(Sec,Positive(Pos));
                   Temp:=B_Dest(Pos+Positive(Offset_Data));
-                  Change_Bit(Temp,Look_Bit(To_Byte(Vector32(J)),Position((
-                              2*I)-1)),7);
-                  Change_Bit(Temp,Look_Bit(To_Byte(Vector32(J)),Position(
-                           2*I)),8);
+                  Change_Bit(Temp,Look_Bit(To_Byte(Vector16(J)),Position(I)),8);
                   B_Dest(Pos+Positive(Offset_Data)):=Temp;
                end loop;
             end loop;
@@ -813,7 +809,7 @@ package body D_Imagen_Bmp24 is
             if Var16=16 then
                Var16:=1;
                -- Codificamos 
-               Vector32:= Passwords.Password_Encrypt(Clave16, Vector16);
+               Vector16:= Passwords.Password_Encrypt(Clave16, Vector16);
                -- Escribimos los datos en la imagen
                Escribir;
             else
@@ -823,7 +819,7 @@ package body D_Imagen_Bmp24 is
             exit when Tam_Bytes_Orig+1=Ind_Datos;
          end loop;
          if Var16/=1 then -- codificamos y escribimos por última vez...
-            Vector32:= Passwords.Password_Encrypt(Clave16, Vector16);
+            Vector16:= Passwords.Password_Encrypt(Clave16, Vector16);
             Escribir;
          end if;
          Final:=Clock;
@@ -835,6 +831,7 @@ package body D_Imagen_Bmp24 is
 
 
          Lib_Buffer_Orig(B_Orig);
+         Clave16:=(others=>' ');
 
          New_Line;
          Put_Line("Creando archivo");
@@ -873,6 +870,9 @@ package body D_Imagen_Bmp24 is
    end Encriptar_Serpent;
 
 
+
+
+
    -- Prec:  "Ruta_origen" es una ruta del sistema válida a una imagen no abierta de 
    --       tipo Bitmap de 24 bits por pixel, el cual contiene un archivo
    --       ocultado correctamente con el procedimiento "Encriptar_Serpent"
@@ -904,7 +904,7 @@ package body D_Imagen_Bmp24 is
          Usar_Ruta_Alternativa : Opcion_Alternativa := 0; 
          Ruta_Alternativa      : String             := "" ) is 
 
-      Tiempo : Duration      := 0.0; -- Estadísticas                                                                                                                                      
+      Tiempo : Duration      := 0.0; -- Estadísticas                                                                                                                                         
       F      : T_Binary_File;  
 
       Tamaño_Origen : Positive;  
@@ -939,10 +939,9 @@ package body D_Imagen_Bmp24 is
          Ruta_Destino   : String (1 .. 256);  
          Sec            : T_Secuencia;  
 
-         Byte_Aux : Byte;  
-         Clave16,  
-         Vector16 : Passwords.String16 := (others => ' ');  
-         Vector32 : Passwords.String32 := (others => ' ');  
+         Byte_Aux   : Byte;  
+         Clave16,   
+         Vector16   : Passwords.String16 := (others => ' ');  
 
          Buffer : Tbuffer :=
          new Vbuffer;
@@ -961,15 +960,14 @@ package body D_Imagen_Bmp24 is
             Leer : Byte     := Init_Byte;  
             Pos  : Positive;  
          begin
-            for I in 1..32 loop
+            for I in Vector16'range loop
                Estadistica:=Estadistica+1;
-               for J in 1..4 loop
+               for J in 1..8 loop
                   Siguiente_Posicion(Sec,Positive(Pos));
                   Leer:=Buffer(Pos+Positive(Offset_Data));
-                  Change_Bit(Temp,Look_Bit(Leer,7),Position((2*J)-1));
-                  Change_Bit(Temp,Look_Bit(Leer,8),Position(2*J));
+                  Change_Bit(Temp,Look_Bit(Leer,8),Position(J));
                end loop;
-               Vector32(I):=To_Character(Temp);
+               Vector16(I):=To_Character(Temp);
             end loop;
          end Leer;
 
@@ -1010,7 +1008,7 @@ package body D_Imagen_Bmp24 is
          Put_Line("Iniciando descodificacion");
          Inicio:=Clock;
          Leer;
-         Vector16:=Passwords.Password_Decrypt(Clave16,Vector32);
+         Vector16:=Passwords.Password_Decrypt(Clave16,Vector16);
          loop
 
             if Var16=1 and Ind_Datos=1 and Ind_Ruta=1 and Ind_Tamaño=1 then
@@ -1084,11 +1082,11 @@ package body D_Imagen_Bmp24 is
             end if;
 
             exit when Ind_Datos>Tamaño_Archivo and Interruptor1;
-            
+
             if Var16=16 then
                Var16:=1;
-               Leer;              
-               Vector16:=Passwords.Password_Decrypt(Clave16,Vector32);
+               Leer;
+               Vector16:=Passwords.Password_Decrypt(Clave16,Vector16);
             else
                Var16:=Var16+1;
             end if;
@@ -1109,6 +1107,8 @@ package body D_Imagen_Bmp24 is
          Close(F);
          Borrar(Sec);
          Lib_Buffer(Buffer);
+         Clave16:=(others=>' ');
+
 
       end Descodificar;
 

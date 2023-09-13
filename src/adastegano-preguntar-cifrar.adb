@@ -1,8 +1,8 @@
 with Ada.Text_Io;
 use Ada.Text_Io;
 
-with Adastegano_Menu,Pantalla,d_xtras;
-use Adastegano_Menu,Pantalla,d_xtras;
+with Adastegano_Menu,Pantalla,D_Xtras;
+use Adastegano_Menu,Pantalla,D_Xtras;
 
 separate(Adastegano.Preguntar)
 
@@ -35,7 +35,7 @@ begin
          Continuar:=True;
          Limpiar_Pantalla;
          Adastegano_Menu.Menu_Cifrado_Metodo;
-      elsif not Comprobar_ruta (Origen(1..Ind_Orig)) then
+      elsif not Comprobar_Ruta (Origen(1..Ind_Orig)) then
          Limpiar_Pantalla;
          Adastegano_Menu.Error_Ruta_Invalida;
          Limpiar_Pantalla;
@@ -70,7 +70,7 @@ begin
                Adastegano_Menu.Error_Rutas_Iguales;
                Limpiar_Pantalla;
                Adastegano_Menu.Menu_Cifrado_Ruta_Destino;
-            elsif not Comprobar_ruta (Destino(1..Ind_Dest)) then
+            elsif not Comprobar_Ruta (Destino(1..Ind_Dest)) then
                Limpiar_Pantalla;
                Adastegano_Menu.Error_Ruta_Invalida;
                Limpiar_Pantalla;
@@ -145,7 +145,7 @@ begin
                                  if Ind_Clave2<
                                        Longitud_Maxima_Clave and
                                        C/=Back then
-                                    Put("***");
+                                    Put(String_Contraseña);
                                     Ind_Clave2:=Ind_Clave2+1;
                                     Clave2(Ind_Clave2):=C;
                                  end if;
@@ -164,31 +164,23 @@ begin
                                  Adastegano_Menu.Menu_Cifrado_Clave;
                               elsif C=Intro then
 
-                                 -- Fin por fin!
+                                 -- Muestra un resumen
                                  if Clave(1..Ind_Clave)=
                                        Clave2(1..Ind_Clave2) then
                                     Limpiar_Pantalla;
                                     Menu_Cifrado_Confirmacion_Datos;
-                                    Put_Line("Metodo:       " &
-                                       Metodo'Img);
-                                    Put_Line("Ruta origen:  " &
-                                       Origen(1..Ind_Orig));
-                                    Put_Line("Ruta destino: " &
-                                       Destino(1..Ind_Dest));
+                                    Confirmacion_Datos_Metodo(T_Metodo'Image(Metodo));
+                                    Confirmacion_Datos_Origen(Origen(1..Ind_Orig));
+                                    Confirmacion_Datos_Destino(Destino(1..Ind_Dest));
                                     if Ind_Cop>0 then
-                                       Put_Line(
-                                          "Ruta copia:   " &
-                                          Copia(1..Ind_Cop));
+                                       Confirmacion_Datos_Copia(Copia(1..Ind_Cop));
                                     else
-                                       Put_Line(
-                                          "Ruta copia:   " &
-                                          Destino(1..Ind_Dest));
+                                       Confirmacion_Datos_Copia(Destino(1..Ind_Dest));
                                     end if;
-                                    Put_Line(
-                                       "Clave:        Confirmada" );
+                                    Confirmacion_Datos_Clave(Mensaje_Confirmacion_Contraseña);
                                     New_Line(5);
                                     Coger_Caracter(C);
-                                    while C/='s' and C/='S' and
+                                    while C/=Caracter_Confirmacion_May and C/=Caracter_Confirmacion_Min and
                                           C/=Esc loop
                                        Coger_Caracter(C);
                                     end loop;

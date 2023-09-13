@@ -1,8 +1,8 @@
 with Ada.Text_Io;
 use Ada.Text_Io;
 
-with Adastegano_Menu,Pantalla,d_xtras;
-use Adastegano_Menu,Pantalla,d_xtras;
+with Adastegano_Menu,Pantalla,D_Xtras;
+use Adastegano_Menu,Pantalla,D_Xtras;
 
 separate(Adastegano.Preguntar)
 
@@ -35,7 +35,7 @@ begin
          Continuar:=True;
          Limpiar_Pantalla;
          Adastegano_Menu.Menu_Descifrado_Metodo;
-      elsif not Comprobar_ruta (Origen(1..Ind_Orig)) then
+      elsif not Comprobar_Ruta (Origen(1..Ind_Orig)) then
          Limpiar_Pantalla;
          Adastegano_Menu.Error_Ruta_Invalida;
          Limpiar_Pantalla;
@@ -87,7 +87,7 @@ begin
                      if Ind_Clave2<
                            Longitud_Maxima_Clave and
                            C/=Back then
-                        Put("***");
+                        Put(String_Contraseña);
                         Ind_Clave2:=Ind_Clave2+1;
                         Clave2(Ind_Clave2):=C;
                      end if;
@@ -106,21 +106,18 @@ begin
                      Adastegano_Menu.Menu_Descifrado_Clave;
                   elsif C=Intro then
 
-                     -- Fin por fin!
+                     -- Muestra un resumen
                      if Clave(1..Ind_Clave)=
                            Clave2(1..Ind_Clave2) then
                         Limpiar_Pantalla;
                         Menu_Descifrado_Confirmacion_Datos;
-                        Put_Line("Metodo:       " &
-                           Metodo'Img);
-                        Put_Line("Ruta origen:  " &
-                           Origen(1..Ind_Orig));
-
-                        Put_Line(
-                           "Clave:        Confirmada" );
+                        Confirmacion_Datos_Metodo(T_Metodo'Image(Metodo));
+                        Confirmacion_Datos_Origen(Origen(1..Ind_Orig));
+                        Confirmacion_Datos_Clave(Mensaje_Confirmacion_Contraseña);
                         New_Line(7);
                         Coger_Caracter(C);
-                        while C/='s' and C/='S' and
+                        while C/=Caracter_Confirmacion_Min and
+                              C/=Caracter_Confirmacion_May and
                               C/=Esc loop
                            Coger_Caracter(C);
                         end loop;

@@ -154,5 +154,8 @@ package AES_Cipher is
    function To_Key (S : String) return Key_Block_256;
 
    function To_Key (S : String) return Key_Block_Variable_Length;
+   
+   -- Converts the string16 into a key
+   function String16_To_Key (S : String) return Key_Block;
 
 end AES_Cipher;
