@@ -1,0 +1,60 @@
+ADASTEGANO v0.1
+
+___________
+Código fuente
+**********
+
+Éste es el código fuente completo de AdaStegano.
+Hecho 100% en Ada95.
+
+***Licencia: GPL***
+                                                                         
+   This is  free software;  you can  redistribute it  and/or  modify       
+   it  under terms of the GNU  General  Public License as published by     
+   the Free Software Foundation; either version 2, or (at your option)     
+   any later version.   AdaStegano  is distributed  in the  hope  that  it     
+   will be useful, but WITHOUT ANY  WARRANTY; without even the implied     
+   warranty of MERCHANTABILITY   or FITNESS FOR  A PARTICULAR PURPOSE.     
+   See the GNU General Public  License  for more details.
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.        
+   http://www.gnu.org/copyleft/gpl.html         
+   
+ ****************************
+ **Creado por: *****************
+ *Andres Soliño Klega ************
+ **andres.age|ARROBA|gmail.com **
+ ****************************
+Cualquier bug, comentario, crítica constructiva, etc, me la puedes enviar por e-mail.
+Recuerda sustituir '|ARROBA|' por '@' :p
+
+Incluye
+
+- Paquetes de de esteganografía y cifrado
+- AdaStegano.odt: documentación con algunos comentarios sobre la implementación de ciertas
+  funciones y partes de AdaStegano. ODT es un archivo de OO.org (Open Office).
+- Código del ejecutable tanto para linux como para windows
+- Código de la GUI para Windows en JEWL, así como las librerías de JEWL
+      Nota: La versión de JEWL está modificada para corregir un bug con Draw_image
+
+Necesita: 
+SO: Windows o Linux
+Compilador: GNAT 3.15p o superior (probado con GNAT 3.3, funciona perfectamente).
+
+Cualquier otro compilador de Ada debería funcionar si se sustituyen los atributos de GNAT x'img por tipo'image(y)
+
+
+COMPILACIÓN EN WINDOWS
+Renombre el archivo src\pantalla-windows.adb por src\pantalla.adb
+Compile y linkee adastegano.adb
+Si desea el ejecutable de la GUI gráfica, compile y linkee adasteganoGUI.adb
+
+
+COMPILACIÓN EN LINUX
+Renombre el archivo src/pantalla-linux.adb por src/pantalla.adb
+Haga 
+$make 
+para generar el ejecutable
+Para instalar, después de hacer el make haga como root
+$make install
